@@ -10,7 +10,7 @@ I used pnpm, mantineUI, tanstack query, vite for bundling and axios for data fet
 - **Form Validation**: Validates the email format, password strength, and other fields before submission.
 - **404 Page**: if any of other routes is given 404 page will be displayed.
 
-
+## Reasons for some choices
 
 - **Mantine UI**: I used mantine UI for it's type-safe features and providing many CSS in JS for their componets
 - **TanStack Router**: I used it for having type-safe routing
