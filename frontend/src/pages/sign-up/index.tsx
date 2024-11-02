@@ -1,0 +1,68 @@
+import { TextInput, PasswordInput, Button, Container, Title, Paper, Text, Stack } from '@mantine/core';
+import { useForm } from '@mantine/form';
+import { useSignUp } from './api/signup';
+import { useState } from 'react';
+import { useNavigate } from '@tanstack/react-router';
+// import { useNavigate } from 'react-router-dom';
+
+
+export type SignUpForm = {
+  name: string;
+  email: string;
+  password: string;
+}
+
+function SignUp() {
+  const navigate = useNavigate({ from: '/auth/sign-up' })
+  const [error, setError] = useState<string | null>(null);
+  const { mutateAsync: signUp, isPending} = useSignUp();
+
+  const form = useForm<SignUpForm>({
+    initialValues: { name: '', email: '', password: '' },
+    validate: {
+      name: (value) => (value.length > 0 ? null : 'Name is required'),
+      email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
+      password: (value) => {
+        if (value.length < 8) return 'Password must be at least 8 characters long';
+        if (!/[a-zA-Z]/.test(value)) return 'Password must contain at least one letter';
+        if (!/[0-9]/.test(value)) return 'Password must contain at least one number';
+        if (!/[!@#$%^&*(),.?":{}|<>]/.test(value)) return 'Password must contain at least one special character';
+        return null;
+      },
+    },
+  });
+
+  const handleSubmit = async (values: SignUpForm) => {
+    try {
+      const result = await signUp(values);
+      localStorage.setItem('authToken', result.access_token);
+      localStorage.setItem('email', result.user.email);
+      localStorage.setItem('username', result.user.username);
+
+      navigate({to: '/home'})
+    } catch (error: unknown) {
+      setError(`Error while Signing up, please check your inputs`);
+      console.error(error);
+    }
+  };
+
+  return (
+    <Container size={800} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '14vh' }}>
+      <Title ta="center" c="brand">Get Started</Title>
+      <Text c="dimmed" size="sm" ta="center" mt="sm">Create your account to start using the app</Text>
+      <Paper withBorder shadow="md" p={40} mt={30} radius="md" style={{ width: '100%', maxWidth: 400 }}>
+        <form onSubmit={form.onSubmit(handleSubmit)}>
+          <Stack gap="md">
+            <TextInput label="Name" placeholder="Ahmad" {...form.getInputProps('name')} required />
+            <TextInput label="Email" placeholder="you@easygenerator.com" {...form.getInputProps('email')} required />
+            <PasswordInput label="Password" placeholder="Your password" {...form.getInputProps('password')} required />
+            {error && <Text color="red">{error}</Text>}
+          </Stack>
+          <Button type="submit" fullWidth mt="xl" radius="md" disabled={isPending}>{isPending ? 'Signing up...' : 'Sign Up'}</Button>
+        </form>
+      </Paper>
+    </Container>
+  );
+}
+
+export default SignUp;
