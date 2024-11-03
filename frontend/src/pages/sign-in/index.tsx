@@ -32,7 +32,7 @@ function SignIn() {
 
         navigate({to: '/home'})
         }catch(error: unknown){
-            setError('Failed to Sign in');
+            setError('Invalid username or password');
         }
     
     };

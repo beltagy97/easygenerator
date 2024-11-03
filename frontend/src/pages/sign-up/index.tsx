@@ -3,7 +3,8 @@ import { useForm } from '@mantine/form';
 import { useSignUp } from './api/signup';
 import { useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
-// import { useNavigate } from 'react-router-dom';
+import { AxiosError } from 'axios';
+import { AuthResponseType } from '../../shared/types';
 
 
 export type SignUpForm = {
@@ -41,7 +42,8 @@ function SignUp() {
 
       navigate({to: '/home'})
     } catch (error: unknown) {
-      setError(`Error while Signing up, please check your inputs`);
+      const axiosError: AuthResponseType = (error as AxiosError).response?.data as AuthResponseType;
+      setError(`${axiosError.message}`);
       console.error(error);
     }
   };
