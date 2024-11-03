@@ -40,3 +40,11 @@ the nestjs app consists of 2 main modules Auth and Logging.
 - **CORS** fine grain the domains allowed to access the backend
 - **short lived JWT** maybe it is better also to have short lived access tokens that are refreshed with refresh token and have the token stored in HTTP only cookie to prevent any JS attack
 
+## Screenshots
+
+![image](https://github.com/user-attachments/assets/25bcbea9-4ae0-4796-ac40-400454deabc4)
+![image](https://github.com/user-attachments/assets/66636a9d-b090-4dfe-9ed7-d55688124e08)
+![image](https://github.com/user-attachments/assets/875995be-f11e-4a90-9722-84e97b050743)
+
+
+
