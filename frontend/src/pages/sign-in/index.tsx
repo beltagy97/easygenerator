@@ -17,7 +17,7 @@ function SignIn() {
     const form = useForm<SignInForm>({
         initialValues: { email: '', password: '' },
         validate: {
-            email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
+            email: (value) => (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? null : 'Invalid email format'),
             password: (value) => (value.length >= 8 ? null : 'Password must be at least 8 characters'),
         },
     });
