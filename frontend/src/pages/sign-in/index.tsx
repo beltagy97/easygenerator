@@ -24,6 +24,7 @@ function SignIn() {
 
     const handleSubmit = async (values: SignInForm, event: React.FormEvent<HTMLFormElement> | undefined) => {
         try {
+        setError(null);
         event?.preventDefault();
         const result = await signIn(values);
         localStorage.setItem('authToken', result.access_token);

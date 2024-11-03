@@ -34,6 +34,7 @@ function SignUp() {
   
   const handleSubmit = async (values: SignUpForm) => {
     try {
+      setError(null);
       const validationResult = form.validate();
       if(validationResult.hasErrors) {
         return;
