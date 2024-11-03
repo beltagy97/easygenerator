@@ -1,9 +1,23 @@
-import { AppShell, Avatar, Container, Group, Title, useMantineTheme, Text } from '@mantine/core';
-import { Outlet } from '@tanstack/react-router';
+import { AppShell, Avatar, Container, Group, Title, useMantineTheme, Text, Button } from '@mantine/core';
+import { Outlet, useNavigate, useLocation } from '@tanstack/react-router';
+import { useState, useEffect } from 'react';
 
 function Layout() {
   const theme = useMantineTheme();
-  
+  const navigate = useNavigate();
+  const location = useLocation(); // I used this to force re-render to re-check the auth token
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!localStorage.getItem('authToken'));
+
+  useEffect(() => {
+    setIsAuthenticated(!!localStorage.getItem('authToken'));
+  }, [location.pathname]); 
+
+  const handleLogout = () => {
+    localStorage.removeItem('authToken');
+    setIsAuthenticated(false);
+    navigate({ to: '/' });
+  };
+
   return (
     <AppShell
       padding="md"
@@ -22,6 +36,7 @@ function Layout() {
             color: 'white',
             display: 'flex',
             alignItems: 'center',
+            justifyContent: 'space-between',
           },
         }}
       >
@@ -36,6 +51,12 @@ function Layout() {
             EASY GENERATOR
           </Title>
         </Group>
+
+        {isAuthenticated && (
+          <Button variant="outline" color='dark' size="xs" mr={'md'} onClick={handleLogout}>
+            Logout
+          </Button>
+        )}
       </AppShell.Header>
 
       <AppShell.Main style={{ padding: '20px 40px' }}>
